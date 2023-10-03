@@ -1,6 +1,4 @@
-#include <iostream>
-
-using namespace std;
+#include "Sort.h"
 
 void ShakerSort(int* array, int size) {
 	int right = size - 1, left = 0;

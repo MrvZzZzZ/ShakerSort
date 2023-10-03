@@ -1,9 +1,6 @@
 #include "Sort.h"
-#include <iostream>
-#include <sstream>
-#include <fstream>
-#include <io.h>
-#include <string>
+#include "TestData.h"
+#include "H_output.h"
 
 using namespace std;
 
@@ -68,4 +65,5 @@ void LoadingTestData() {
 			break;
 		}
 	} while (UserChoise != 1 && UserChoise != 2);
+	saveTheArray(arrayOfNumbers, sizeArray);
 }
