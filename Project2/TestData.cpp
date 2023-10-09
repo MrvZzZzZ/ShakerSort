@@ -66,4 +66,12 @@ void LoadingTestData() {
 		}
 	} while (UserChoise != 1 && UserChoise != 2);
 	saveTheArray(arrayOfNumbers, sizeArray);
+
+	DeleteArray(arrayOfNumbers);
+}
+
+void DeleteArray(int*& numbers)
+{
+	delete[] numbers;
+	numbers = nullptr;
 }

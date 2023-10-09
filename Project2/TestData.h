@@ -6,3 +6,4 @@
 #include <string>
 
 void LoadingTestData();
+void DeleteArray(int*& numbers);

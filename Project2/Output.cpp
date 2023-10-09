@@ -22,7 +22,7 @@ string Check_string()
 	string Input;
 	while (true)
 	{
-		getline (cin, Input);
+		cin >> Input;
 
 		regex Pattern_the_empoty_input("(\\s*)");
 
