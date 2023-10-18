@@ -21,7 +21,7 @@
     <ClCompile Include="main.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="TestData.cpp">
+    <ClCompile Include="Menu.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="Output.cpp">
@@ -32,10 +32,10 @@
     <ClInclude Include="Sort.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="TestData.h">
+    <ClInclude Include="Menu.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="H_output.h">
+    <ClInclude Include="Output.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,130 +1,167 @@
-#include "H_output.h"
+#include "Output.h"
 
-enum _bool { True_ = 1, False_ = 2 };
+enum CreateNewFile 
+{ 
+	CreateNewFileCommand = 1,
+	SkipCreateFileCommand = 2 
+};
 
-int Check_int()
+/// <summary>
+/// 
+/// </summary>
+/// <returns></returns>
+int GetInt()
 {
-	int Input = 0;
-	cin >> Input;
+	int userInput = 0;
+	cin >> userInput;
+
 	while (cin.fail())
 	{
 		cout << "Некорректный ввод. Повторите попытку >>" << endl;
 		cin.clear();
+
 		while (getchar() != '\n');
-		cin >> Input;
+		
+		cin >> userInput;
 	}
+
 	while (getchar() != '\n');
-	return Input;
+
+	return userInput;
 }
 
-string Check_string()
+/// <summary>
+/// 
+/// </summary>
+/// <returns></returns>
+string GetString()
 {
-	string Input;
+	string userInput;
 	while (true)
 	{
-		cin >> Input;
+		cin >> userInput;
+		regex emptyInputPattern("(\\s*)");
 
-		regex Pattern_the_empoty_input("(\\s*)");
-
-		// - // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-		if (regex_match(Input, Pattern_the_empoty_input) == false)
+		if (regex_match(userInput, emptyInputPattern) == false)
 		{
-			regex Pattern_the_correct_symble("^[а-яА-ЯёЁa-zA-Z0-9/:._ ]+$");
+			regex correctSymbolPattern("^[а-яА-ЯёЁa-zA-Z0-9/:._ ]+$");
 
-			// - // - // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-			if (regex_match(Input, Pattern_the_correct_symble) == true)
+			if (regex_match(userInput, correctSymbolPattern) == true)
 			{
-				regex Pattern_of_allowed_names("\\b(con|aux|prn|com|lpt|nul)\\b((\\.)*(\\w)*)*");
+				regex allowedNamesPattern("\\b(con|aux|prn|com|lpt|nul)\\b((\\.)*(\\w)*)*");
 
-				for (int i = NULL; i < Input.size(); i++) Input[i] = tolower(Input[i]);
+				for (int i = NULL; i < userInput.size(); i++)
+				{
+					userInput[i] = tolower(userInput[i]);
+				}
 
-				// - // - // - // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-				if (regex_match(Input, Pattern_of_allowed_names) == false) return Input;
-
-				// - // - // - // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+				if (regex_match(userInput, allowedNamesPattern) == false)
+				{
+					return userInput;
+				}
 				else cout << "Ошибка: вы ввели зарезервированное имя. Повторите попытку ввода." << endl;
 			}
-
-			// - // - // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			else cout << "Ошибка: вы ввели запрещенный символ. Повторите попытку ввода." << endl;
 		}
-		// - // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 		else  cout << "Ошибка: вы оставили ввод пустым. Повторите попытку ввода." << endl;
 	}
 }
 
-bool Is_valid_filename(string& Filename) 
+/// <summary>
+/// 
+/// </summary>
+/// <param name="Filename"></param>
+/// <returns></returns>
+bool IsValidFilename(string& filename) 
 {
 	regex pattern(".+\\.txt$");
-	return regex_match(Filename, pattern);
+	return regex_match(filename, pattern);
 }
 
-bool Is_only_read(string Filename)
+bool IsReadOnly(string filename)
 {
-	if (_access(Filename.c_str(), 2)) return false;
+	if (_access(filename.c_str(), 2))
+	{
+		return false;
+	}
 	else return true;
 }
 
-bool Is_file_exists(string Filename)
+bool IsFileExist(string filename)
 {
-	if (!_access(Filename.c_str(), 0)) return true;
+	if (!_access(filename.c_str(), 0))
+	{
+		return true;
+	}
 	else return false;
 }
 
-void saveTheArray(int* Array, int sizeArray)
+void SaveArray(int* Array, int sizeArray)
 {
 	ofstream file;
 	string filename;
 	bool isFileCorrect = true;
+
 	do
 	{
 		isFileCorrect = true;
 		cout << "Введите имя файла: ";
-		filename = Check_string();
-		// - / - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-		if (!Is_valid_filename(filename))
+		filename = GetString();
+
+		if (!IsValidFilename(filename)) //что ожидается для вывода ошибки
 		{
 			cout << "Ошибка: Неверный формат файла - " << filename << endl;
 			isFileCorrect = false;
 			continue;
 		}
 
-		// - / - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-		if (!Is_file_exists(filename))
+		if (!IsFileExist(filename)) //что ожидается для входа в if
 		{
-			int Creat_the_new_file = NULL;
-			bool Choise_entered = false;
+			int userInput = NULL;
+			bool isChoiceMade = false;
+
 			do
 			{
 				cout << "Внимание: файла не существует! Желаете создать новый файл с данным именем?" << endl << "1 - Да." << endl << "2 - Нет." << endl;
-				Creat_the_new_file = Check_int();
+				userInput = GetInt();
 
-				// - // - // - // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-				if (Creat_the_new_file == True_) { file.open(filename); file.close(); Choise_entered = true; }
+				if (userInput == CreateNewFileCommand) 
+				{ 
+					file.open(filename); 
+					file.close();
+					isChoiceMade = true;
+				}
+				else if (userInput == SkipCreateFileCommand)
+				{
+					isChoiceMade = true;
+				}
+				else 
+				{ 
+					cout << "Ошибка: некорректной ввод! Повторите попытку ввода." << endl; 
+					system("pause");
+				}
+			} 
+			while (!isChoiceMade);
 
-				// - // - // - // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-				else if (Creat_the_new_file == False_) Choise_entered = true;
-
-				// - // - // - // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-				else { cout << "Ошибка: некорректной ввод! Повторите попытку ввода." << endl; system("pause"); }
-			} while (!Choise_entered);
-
-			if (Creat_the_new_file == False_) continue;
+			if (userInput == SkipCreateFileCommand) 
+				continue;
 		}
 
-		if (!Is_only_read(filename))
+		if (!IsReadOnly(filename)) //что ожидается для вывода ошибки
 		{
 			cout << "Ошибка: Файл в режиме чтения. Запись невозможна - " << filename << endl;
 			isFileCorrect = false;
 		}
-	} while (!isFileCorrect);
+	}
+	while (!isFileCorrect);
 
 	file.open(filename);
 
-	for (int i = NULL; i < sizeArray; i++) file << Array[i] << " ";
+	for (int i = NULL; i < sizeArray; i++)
+	{
+		file << Array[i] << " ";
+	}
 
 	file.close();
-
-
 }
 
